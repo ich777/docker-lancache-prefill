@@ -8,15 +8,15 @@ RUN apt-get update && \
 	rm -rf /var/lib/apt/lists/*
 
 ENV DATA_DIR="/lancacheprefill"
-ENV ENABLE_BN="true"
+ENV ENABLE_BN="false"
 ENV ENABLE_STEAM="true"
 ENV UPDATES="true"
 ENV FORCE_UPDATE="false"
 ENV LOGCLEANUP="true"
 ENV CRON_SCHED_BN="0 5 * * *"
 ENV CRON_SCHED_STEAM="0 2 * * *"
-ENV PREFILL_PARAMS_BN="prefill --products s1 d3 wow_classic"
-ENV PREFILL_PARAMS_STEAM="prefill --recent"
+ENV PREFILL_PARAMS_BN="--products s1 d3 wow_classic"
+ENV PREFILL_PARAMS_STEAM="--recent"
 ENV UMASK=000
 ENV UID=99
 ENV GID=100
