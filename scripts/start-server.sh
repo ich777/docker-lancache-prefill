@@ -147,7 +147,7 @@ fi
 
 rm -f ${DATA_DIR}/cron 2>/dev/null
 if [ "${ENABLE_BN}" == "true" ]; then
-  echo "${BN_CRON_SCHEDULE} ${DATA_DIR}/BattleNetPrefill/BattleNetPrefill prefill ${PREFILL_PARAMS_BN} >> ${DATA_DIR}/logs/battlenet_prefill.log" > ${DATA_DIR}/cron
+  echo "${CRON_SCHED_BN} ${DATA_DIR}/BattleNetPrefill/BattleNetPrefill prefill ${PREFILL_PARAMS_BN} >> ${DATA_DIR}/logs/battlenet_prefill.log" > ${DATA_DIR}/cron
   touch ${DATA_DIR}/logs/battlenet_prefill.log
   TAIL_FOLLOW="${DATA_DIR}/logs/battlenet_prefill.log"
 fi
@@ -155,7 +155,7 @@ if [ "${ENALBED_STEAM}" == "true" ]; then
   if [ "${STEAM_NO_CONFIG}" == "true" ]; then
     echo "---Steam not configured, please make sure you configure it first---"
   else
-    echo "${STEAM_CRON_SCHEDULE} ${DATA_DIR}/SteamPrefill/SteamPrefill prefill --no-ansi ${PREFILL_PARAMS_STEAM} >> ${DATA_DIR}/logs/steam_prefill.log" >> ${DATA_DIR}/cron
+    echo "${CRON_SCHED_STEAM} ${DATA_DIR}/SteamPrefill/SteamPrefill prefill --no-ansi ${PREFILL_PARAMS_STEAM} >> ${DATA_DIR}/logs/steam_prefill.log" >> ${DATA_DIR}/cron
     touch ${DATA_DIR}/logs/steam_prefill.log
     if [ -z "${TAIL_FOLLOW}" ]; then
       TAIL_FOLLOW="${DATA_DIR}/logs/steam_prefill.log"
