@@ -1,4 +1,5 @@
 #!/bin/bash
+# Battle Net routine and update check
 if [ "${ENABLE_BN}" == "true" ]; then
   cd ${DATA_DIR}
   echo "---BattleNetPrefill enabled!---"
@@ -58,6 +59,7 @@ if [ "${ENABLE_BN}" == "true" ]; then
   fi
 fi
 
+# Steam routine and update check
 if [ "${ENABLE_STEAM}" == "true" ]; then
   cd ${DATA_DIR}
   echo "---SteamPrefill enabled!---"
@@ -117,6 +119,7 @@ if [ "${ENABLE_STEAM}" == "true" ]; then
   fi
 fi
 
+# Create logs dir and check if logcleanup is enabled
 if [ ! -d ${DATA_DIR}/logs ]; then
   mkdir -p ${DATA_DIR}/logs
   if [ "${LOGCLEANUP}" == "true" ]; then
@@ -124,12 +127,28 @@ if [ ! -d ${DATA_DIR}/logs ]; then
   fi
 fi
 
+# Check if Steam is already configured or not
 if [ ! -f ${DATA_DIR}/SteamPrefill/Config/account.config ]; then
   STEAM_NO_CONFIG="true"
+  echo "+-----------------------------------------------------------------------+"
+  echo "| ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION |"
+  echo "|                                                                       |"
+  echo "| Steam not configured, to configure Steam please do the following:     |"
+  echo "| 1. Open up a container console                                        |"
+  echo "| 2. Type in 'su \$USER' (case sensitive!) and press ENTER               |"
+  echo "| 3. Type in 'cd \${DATA_DIR}/SteamPrefill' and press ENTER              |"
+  echo "| 4. Type in './SteamPrefill select-apps' and press ENTER               |"
+  echo "| 5. Enter your Steam credentials and follow the steps displayed        |"
+  echo "| 6. Select the apps you want to prefill (you don't have to select any) |"
+  echo "| 7. Done                                                               |"
+  echo "|                                                                       |"
+  echo "| ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION |"
+  echo "+-----------------------------------------------------------------------+"
 else
   STEAM_NO_CONFIG="false"
 fi
 
+# Check if force update on container start/restart is enabled and execute prefill
 if [ "${FORCE_UPDATE}" == "true" ]; then
   crontab -r 2>/dev/null
   echo "---Force update enabled!---"
@@ -145,6 +164,7 @@ if [ "${FORCE_UPDATE}" == "true" ]; then
   fi
 fi
 
+# Set up cron schedules and tail follow
 rm -f ${DATA_DIR}/cron 2>/dev/null
 if [ "${ENABLE_BN}" == "true" ]; then
   echo "${CRON_SCHED_BN} ${DATA_DIR}/BattleNetPrefill/BattleNetPrefill prefill ${PREFILL_PARAMS_BN} >> ${DATA_DIR}/logs/battlenet_prefill.log" > ${DATA_DIR}/cron
@@ -165,8 +185,20 @@ if [ "${ENABLE_STEAM}" == "true" ]; then
   fi
 fi
 
-# Set up crontab
+# Set up crontab and list cron
 crontab ${DATA_DIR}/cron
 
+if [ "${ENABLE_BN}" == "true" ]; then
+  echo "Your cron schedule for Battle.net is: ${CRON_SCHED_BN}"
+fi
+if [ "${ENABLE_STEAM}" == "true" ]; then
+  if [ "${STEAM_NO_CONFIG}" == "true" ]; then
+    echo "---Steam not configured, please make sure you configure it first---"
+  else
+      echo "Your cron schedule for Steam is: ${CRON_SCHED_STEAM}"
+  fi
+fi
+
+# Follow log files
 tail -f ${TAIL_FOLLOW}
 sleep infinity
