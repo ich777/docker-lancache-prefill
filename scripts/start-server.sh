@@ -125,6 +125,9 @@ if [ "${ENABLE_STEAM}" == "true" ]; then
   fi
 fi
 
+echo "---Prepare Server---"
+chmod -R ${DATA_PERM} ${DATA_DIR}
+
 # Create logs dir and check if logcleanup is enabled
 if [ ! -d ${DATA_DIR}/logs ]; then
   mkdir -p ${DATA_DIR}/logs
@@ -139,7 +142,7 @@ if [ ! -f ${DATA_DIR}/SteamPrefill/Config/account.config ]; then
   echo "+-----------------------------------------------------------------------+"
   echo "| ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION |"
   echo "|                                                                       |"
-  echo "| Steam not configured, to configure Steam please do the following:     |"
+  echo "| Steam Prefill not configured, to configure it please do the following:|"
   echo "| 1. Open up a container console                                        |"
   echo "| 2. Type in 'su \$USER' (case sensitive!) and press ENTER               |"
   echo "| 3. Type in 'cd \${DATA_DIR}/SteamPrefill' and press ENTER              |"
@@ -162,9 +165,7 @@ if [ "${FORCE_UPDATE}" == "true" ]; then
     ${DATA_DIR}/BattleNetPrefill/BattleNetPrefill prefill ${PREFILL_PARAMS_BN}
   fi
   if [ "${ENABLE_STEAM}" == "true" ]; then
-    if [ "${STEAM_NO_CONFIG}" == "true" ]; then
-      echo "---Steam not configured, please make sure you configure it first!---"
-    else
+    if [ "${STEAM_NO_CONFIG}" != "true" ]; then
       ${DATA_DIR}/SteamPrefill/SteamPrefill prefill --no-ansi ${PREFILL_PARAMS_STEAM}
     fi
   fi
@@ -178,9 +179,7 @@ if [ "${ENABLE_BN}" == "true" ]; then
   TAIL_FOLLOW="${DATA_DIR}/logs/battlenet_prefill.log"
 fi
 if [ "${ENABLE_STEAM}" == "true" ]; then
-  if [ "${STEAM_NO_CONFIG}" == "true" ]; then
-    echo "---Steam not configured, please make sure you configure it first---"
-  else
+  if [ "${STEAM_NO_CONFIG}" != "true" ]; then
     echo "${CRON_SCHED_STEAM} ${DATA_DIR}/SteamPrefill/SteamPrefill prefill --no-ansi ${PREFILL_PARAMS_STEAM} >> ${DATA_DIR}/logs/steam_prefill.log" >> ${DATA_DIR}/cron
     touch ${DATA_DIR}/logs/steam_prefill.log
     if [ -z "${TAIL_FOLLOW}" ]; then
@@ -198,12 +197,11 @@ if [ "${ENABLE_BN}" == "true" ]; then
   echo "Your cron schedule for BattleNetPrefill is: ${CRON_SCHED_BN}"
 fi
 if [ "${ENABLE_STEAM}" == "true" ]; then
-  if [ "${STEAM_NO_CONFIG}" == "true" ]; then
-    echo "---Steam not configured, please make sure you configure it first---"
-  else
+  if [ "${STEAM_NO_CONFIG}" != "true" ]; then
       echo "Your cron schedule for SteamPrefill is: ${CRON_SCHED_STEAM}"
   fi
 fi
-
+echo
+echo "---Container fully started, waiting for next cron job to start!---"
 # Follow log files
 tail -f ${TAIL_FOLLOW}
