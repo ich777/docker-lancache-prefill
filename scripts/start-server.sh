@@ -136,25 +136,27 @@ if [ ! -d ${DATA_DIR}/logs ]; then
   fi
 fi
 
-# Check if Steam is already configured or not
-if [ ! -f ${DATA_DIR}/SteamPrefill/Config/account.config ]; then
-  STEAM_NO_CONFIG="true"
-  echo "+-----------------------------------------------------------------------+"
-  echo "| ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION |"
-  echo "|                                                                       |"
-  echo "| Steam Prefill not configured, to configure it please do the following:|"
-  echo "| 1. Open up a container console                                        |"
-  echo "| 2. Type in 'su \$USER' (case sensitive!) and press ENTER               |"
-  echo "| 3. Type in 'cd \${DATA_DIR}/SteamPrefill' and press ENTER              |"
-  echo "| 4. Type in './SteamPrefill select-apps' and press ENTER               |"
-  echo "| 5. Enter your Steam credentials and follow the steps displayed        |"
-  echo "| 6. Select the apps you want to prefill (you don't have to select any) |"
-  echo "| 7. Done                                                               |"
-  echo "|                                                                       |"
-  echo "| ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION |"
-  echo "+-----------------------------------------------------------------------+"
-else
-  STEAM_NO_CONFIG="false"
+# Check if Steam is enabled and already configured or not
+if [ "${ENABLE_STEAM}" == "true" ]; then
+  if [ ! -f ${DATA_DIR}/SteamPrefill/Config/account.config ]; then
+    STEAM_NO_CONFIG="true"
+    echo "+-----------------------------------------------------------------------+"
+    echo "| ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION |"
+    echo "|                                                                       |"
+    echo "| Steam Prefill not configured, to configure it please do the following:|"
+    echo "| 1. Open up a container console                                        |"
+    echo "| 2. Type in 'su \$USER' (case sensitive!) and press ENTER               |"
+    echo "| 3. Type in 'cd \${DATA_DIR}/SteamPrefill' and press ENTER              |"
+    echo "| 4. Type in './SteamPrefill select-apps' and press ENTER               |"
+    echo "| 5. Enter your Steam credentials and follow the steps displayed        |"
+    echo "| 6. Select the apps you want to prefill (you don't have to select any) |"
+    echo "| 7. Done                                                               |"
+    echo "|                                                                       |"
+    echo "| ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION |"
+    echo "+-----------------------------------------------------------------------+"
+  else
+    STEAM_NO_CONFIG="false"
+  fi
 fi
 
 # Check if force update on container start/restart is enabled and execute prefill
