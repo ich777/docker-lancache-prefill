@@ -133,10 +133,10 @@ fi
 if [ "${FORCE_UPDATE}" == "true" ]; then
   crontab -r 2>/dev/null
   echo "---Force update enabled!---"
-  if [ "${BN_ENALBED}" == "true" ]; then
+  if [ "${ENABLE_BN}" == "true" ]; then
     ${DATA_DIR}/BattleNetPrefill/BattleNetPrefill prefill ${PREFILL_PARAMS_BN}
   fi
-  if [ "${STEAM_ENALBED}" == "true" ]; then
+  if [ "${ENALBED_STEAM}" == "true" ]; then
     if [ "${STEAM_NO_CONFIG}" == "true" ]; then
       echo "---Steam not configured, please make sure you configure it first!---"
     else
