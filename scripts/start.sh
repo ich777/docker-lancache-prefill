@@ -32,7 +32,8 @@ chown -R ${UID}:${GID} ${DATA_DIR}
 
 echo "---Starting...---"
 term_handler() {
-	kill -SIGKILL 1
+	kill -SIGINT $(pidof tail)
+	tail --pid=$(pidof tail) -f 2>/dev/null
 	sleep 0.5
 	exit 143;
 }
