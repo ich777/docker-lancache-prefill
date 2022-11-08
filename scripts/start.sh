@@ -18,11 +18,19 @@ else
     echo "---No optional script found, continuing---"
 fi
 
-echo "---Starting...---"
+echo "---Starting cron---"
+if [ -f /var/run/crond.pid ]; then
+	rm -rf /var/run/crond.pid
+fi
+export PATH=/bin:/usr/bin:${DATA_DIR}:$PATH
+/usr/sbin/cron -- p
+
+echo "---Taking ownership of data...---"
 chown -R root:${GID} /opt/scripts
 chmod -R 750 /opt/scripts
 chown -R ${UID}:${GID} ${DATA_DIR}
 
+echo "---Starting...---"
 term_handler() {
 	kill -SIGKILL 1
 	sleep 0.5
