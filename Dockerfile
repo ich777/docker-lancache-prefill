@@ -4,13 +4,15 @@ LABEL org.opencontainers.image.authors="admin@minenet.at"
 LABEL org.opencontainers.image.source="https://github.com/ich777/docker-lancache-prefill"
 
 RUN apt-get update && \
-	apt-get -y install --no-install-recommends unzip jq && \
+	apt-get -y install --no-install-recommends unzip jq cron && \
 	rm -rf /var/lib/apt/lists/*
 
 ENV DATA_DIR="/lancacheprefill"
 ENV ENABLE_BN="true"
 ENV ENABLE_STEAM="true"
 ENV UPDATES="true"
+ENV FORCE_UPDATE="true"
+ENV LOGCLEANUP="true"
 ENV CRON_SCHED_BN="0 5 * * *"
 ENV CRON_SCHED_STEAM="0 2 * * *"
 ENV PREFILL_PARAMS_BN="prefill --products s1 d3 wow_classic"
