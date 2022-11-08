@@ -82,7 +82,7 @@ if [ "${ENABLE_STEAM}" == "true" ]; then
     mv $(find /tmp/steamprefill -type f -name "SteamPrefill*") ${DATA_DIR}/SteamPrefill/SteamPrefill
     chmod +x ${DATA_DIR}/SteamPrefill/SteamPrefill
     rm -rf ${DATA_DIR}/STEAMPrefill.zip /tmp/steamprefill
-    touch ${DATA_DIR}/steamprefill_${BN_LAT_V}
+    touch ${DATA_DIR}/steamprefill_${STEAM_LAT_V}
   else
     STEAM_CUR_V="$(find ${DATA_DIR}/ -maxdepth 1 -type f -name "steamprefill_*" | cut -d '_' -f2)"
     if [ "${UPDATES}" == "true" ]; then
@@ -107,7 +107,7 @@ if [ "${ENABLE_STEAM}" == "true" ]; then
         mv $(find /tmp/steamprefill -type f -name "SteamPrefill*") ${DATA_DIR}/SteamPrefill/SteamPrefill
         chmod +x ${DATA_DIR}/SteamPrefill/SteamPrefill
         rm -rf ${DATA_DIR}/STEAMPrefill.zip /tmp/steamprefill
-        touch ${DATA_DIR}/steamprefill_${BN_LAT_V}
+        touch ${DATA_DIR}/steamprefill_${STEAM_LAT_V}
       elif [ "${STEAM_CUR_V}" == "${STEAM_LAT_V}" ]; then
         echo "---SteamPrefill ${STEAM_CUR_V} up-to-date---"
       fi
@@ -145,7 +145,7 @@ if [ "${FORCE_UPDATE}" == "true" ]; then
   fi
 fi
 
-rm -f ${DATA_DIR}/cron
+rm -f ${DATA_DIR}/cron 2>/dev/null
 if [ "${BN_ENALBED}" == "true" ]; then
   echo "${BN_CRON_SCHEDULE} ${DATA_DIR}/BattleNetPrefill/BattleNetPrefill prefill ${PREFILL_PARAMS_BN} >> ${DATA_DIR}/logs/battlenet_prefill.log" > ${DATA_DIR}/cron
   touch ${DATA_DIR}/logs/battlenet_prefill.log
