@@ -1,4 +1,10 @@
 #!/bin/bash
+# Check if at least one prefil method is enabled
+if [ "${ENABLE_BN}" != "true" ] && [ "${ENABLE_STEAM}" != "true" ]; then
+  echo "---No prefill selected, please enable at least one and restart the container!---"
+  sleep infinity
+fi
+
 # Battle Net routine and update check
 if [ "${ENABLE_BN}" == "true" ]; then
   cd ${DATA_DIR}
@@ -189,16 +195,15 @@ fi
 crontab ${DATA_DIR}/cron
 
 if [ "${ENABLE_BN}" == "true" ]; then
-  echo "Your cron schedule for Battle.net is: ${CRON_SCHED_BN}"
+  echo "Your cron schedule for BattleNetPrefill is: ${CRON_SCHED_BN}"
 fi
 if [ "${ENABLE_STEAM}" == "true" ]; then
   if [ "${STEAM_NO_CONFIG}" == "true" ]; then
     echo "---Steam not configured, please make sure you configure it first---"
   else
-      echo "Your cron schedule for Steam is: ${CRON_SCHED_STEAM}"
+      echo "Your cron schedule for SteamPrefill is: ${CRON_SCHED_STEAM}"
   fi
 fi
 
 # Follow log files
 tail -f ${TAIL_FOLLOW}
-sleep infinity
