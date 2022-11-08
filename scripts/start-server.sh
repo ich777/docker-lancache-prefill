@@ -120,7 +120,7 @@ fi
 if [ ! -d ${DATA_DIR}/logs ]; then
   mkdir -p ${DATA_DIR}/logs
   if [ "${LOGCLEANUP}" == "true" ]; then
-    rm -r ${DATA_DIR}/logs/*
+    rm -f ${DATA_DIR}/logs/*
   fi
 fi
 
@@ -145,7 +145,7 @@ if [ "${FORCE_UPDATE}" == "true" ]; then
   fi
 fi
 
-rm -rf ${DATA_DIR}/cron
+rm -f ${DATA_DIR}/cron
 if [ "${BN_ENALBED}" == "true" ]; then
   echo "${BN_CRON_SCHEDULE} ${DATA_DIR}/BattleNetPrefill/BattleNetPrefill prefill ${PREFILL_PARAMS_BN} >> ${DATA_DIR}/logs/battlenet_prefill.log" > ${DATA_DIR}/cron
   touch ${DATA_DIR}/logs/battlenet_prefill.log
