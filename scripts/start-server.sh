@@ -136,7 +136,7 @@ if [ "${FORCE_UPDATE}" == "true" ]; then
   if [ "${ENABLE_BN}" == "true" ]; then
     ${DATA_DIR}/BattleNetPrefill/BattleNetPrefill prefill ${PREFILL_PARAMS_BN}
   fi
-  if [ "${ENALBED_STEAM}" == "true" ]; then
+  if [ "${ENABLE_STEAM}" == "true" ]; then
     if [ "${STEAM_NO_CONFIG}" == "true" ]; then
       echo "---Steam not configured, please make sure you configure it first!---"
     else
@@ -151,7 +151,7 @@ if [ "${ENABLE_BN}" == "true" ]; then
   touch ${DATA_DIR}/logs/battlenet_prefill.log
   TAIL_FOLLOW="${DATA_DIR}/logs/battlenet_prefill.log"
 fi
-if [ "${ENALBED_STEAM}" == "true" ]; then
+if [ "${ENABLE_STEAM}" == "true" ]; then
   if [ "${STEAM_NO_CONFIG}" == "true" ]; then
     echo "---Steam not configured, please make sure you configure it first---"
   else
@@ -165,7 +165,7 @@ if [ "${ENALBED_STEAM}" == "true" ]; then
   fi
 fi
 
-sleep 1
+# Set up crontab
 crontab ${DATA_DIR}/cron
 
 tail -f ${TAIL_FOLLOW}
