@@ -199,7 +199,7 @@ fi
 
 # Set up crontab and list cron
 crontab ${DATA_DIR}/cron
-
+echo
 if [ "${ENABLE_BN}" == "true" ]; then
   echo "Your cron schedule for BattleNetPrefill is: ${CRON_SCHED_BN}"
 fi
