@@ -131,12 +131,14 @@ fi
 echo "---Prepare Server---"
 chmod -R ${DATA_PERM} ${DATA_DIR}
 
-# Create logs dir and check if logcleanup is enabled
+# Create logs dir if non exists
 if [ ! -d ${DATA_DIR}/logs ]; then
   mkdir -p ${DATA_DIR}/logs
-  if [ "${LOGCLEANUP}" == "true" ]; then
-    rm -f ${DATA_DIR}/logs/*
-  fi
+fi
+
+# Check if logcleanup is enabled
+if [ "${LOGCLEANUP}" == "true" ]; then
+   rm -f ${DATA_DIR}/logs/*
 fi
 
 # Check if Steam is enabled and already configured or not
