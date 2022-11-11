@@ -7,6 +7,19 @@ This container will download and install BattleNetPrefill and/or SteamPrefill an
 
 **Update Notice:** The container will check by default on each start/restart on new updates for BattleNetPrefill and/or SteamPrefill, this can be disabled if really wanted.
 
+**Steam Prefill Notice:** Steam Prefill needs to be configured to work properly, please enter the following commands and follow the prompts afterwards, you can close the window when you are finished:
+1. Open up a container console
+2. Type in 'su $USER' (case sensitive!) and press ENTER
+3. Type in 'cd ${DATA_DIR}/SteamPrefill' and press ENTER
+4. Type in './SteamPrefill select-apps' and press ENTER
+5. Enter your Steam credentials and follow the steps displayed
+6. Select the apps you want to prefill (you don't have to select any)
+7. Done
+
+(these stepps are also displayed in the container log when Steam isn't configured yet)
+
+If you ever want to change the apps you've selected then follow these steps again.
+
 ## Env params
 | Name | Value | Example |
 | --- | --- | --- |
