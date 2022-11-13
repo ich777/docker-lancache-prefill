@@ -241,12 +241,16 @@ crontab /tmp/cron 2>/dev/null || { \
   echo "+---------------------------------------------------------------+"; }
 
 echo
-if [ "${ENABLE_BN}" == "true" ]; then
-  echo "Your cron schedule for BattleNetPrefill is: ${CRON_SCHED_BN}"
-fi
-if [ "${ENABLE_STEAM}" == "true" ]; then
-  if [ "${STEAM_NO_CONFIG}" != "true" ]; then
-      echo "Your cron schedule for SteamPrefill is: ${CRON_SCHED_STEAM}"
+if [ ! -z "${CRON_SCHED_GLOBAL}" ]; then
+  echo "Your cron schedule for BattleNet and Steam Prefill is: ${CRON_SCHED_GLOBAL}"
+else
+  if [ "${ENABLE_BN}" == "true" ]; then
+    echo "Your cron schedule for BattleNetPrefill is: ${CRON_SCHED_BN}"
+  fi
+  if [ "${ENABLE_STEAM}" == "true" ]; then
+    if [ "${STEAM_NO_CONFIG}" != "true" ]; then
+        echo "Your cron schedule for SteamPrefill is: ${CRON_SCHED_STEAM}"
+    fi
   fi
 fi
 echo
