@@ -188,13 +188,13 @@ rm -f ${DATA_DIR}/cron 2>/dev/null
 if [ ! -z "${CRON_SCHED_GLOBAL}" ]; then
   echo "#!/bin/bash" > /tmp/global_schedule
   if [ "${ENABLE_BN}" == "true" ]; then
-   echo "\${DATA_DIR}/BattleNetPrefill/BattleNetPrefill prefill \${PREFILL_PARAMS_BN} >> \${DATA_DIR}/logs/battlenet_prefill.log" >> /tmp/global_schedule
+   echo "${DATA_DIR}/BattleNetPrefill/BattleNetPrefill prefill ${PREFILL_PARAMS_BN} >> ${DATA_DIR}/logs/battlenet_prefill.log" >> /tmp/global_schedule
    touch ${DATA_DIR}/logs/battlenet_prefill.log
    TAIL_FOLLOW="${DATA_DIR}/logs/battlenet_prefill.log"
   fi
   if [ "${ENABLE_STEAM}" == "true" ]; then
     if [ "${STEAM_NO_CONFIG}" != "true" ]; then
-      echo "\${DATA_DIR}/SteamPrefill/SteamPrefill prefill --no-ansi \${PREFILL_PARAMS_STEAM} >> \${DATA_DIR}/logs/steam_prefill.log" >> /tmp/global_schedule
+      echo "${DATA_DIR}/SteamPrefill/SteamPrefill prefill --no-ansi ${PREFILL_PARAMS_STEAM} >> ${DATA_DIR}/logs/steam_prefill.log" >> /tmp/global_schedule
       touch ${DATA_DIR}/logs/steam_prefill.log
       if [ -z "${TAIL_FOLLOW}" ]; then
         TAIL_FOLLOW="${DATA_DIR}/logs/steam_prefill.log"
@@ -252,7 +252,10 @@ else
     fi
   fi
 fi
+
 echo
 echo "---Container fully started, waiting for next cron job to start!---"
+echo
+
 # Follow log files
 tail -f ${TAIL_FOLLOW}
