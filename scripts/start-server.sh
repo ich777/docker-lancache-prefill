@@ -241,7 +241,7 @@ crontab /tmp/cron 2>/dev/null || { \
 
 echo
 if [ ! -z "${CRON_SCHED_GLOBAL}" ]; then
-  echo "Your cron schedule for BattleNet and Steam Prefill is: ${CRON_SCHED_GLOBAL}"
+  echo "Your global defined cron schedule is: ${CRON_SCHED_GLOBAL}"
 else
   if [ "${ENABLE_BN}" == "true" ]; then
     echo "Your cron schedule for BattleNetPrefill is: ${CRON_SCHED_BN}"
