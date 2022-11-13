@@ -206,8 +206,7 @@ if [ ! -z "${CRON_SCHED_GLOBAL}" ]; then
   chmod +x /tmp/global_schedule
   echo "${CRON_SCHED_GLOBAL} /tmp/global_schedule" > /tmp/cron
 else
-  rm -rf /tmp/global_schedule
-  rm -rf /tmp/cron
+  rm -rf /tmp/cron /tmp/global_schedule /tmp/global_schedule
   if [ "${ENABLE_BN}" == "true" ]; then
      echo "${CRON_SCHED_BN} ${DATA_DIR}/BattleNetPrefill/BattleNetPrefill prefill ${PREFILL_PARAMS_BN} >> ${DATA_DIR}/logs/battlenet_prefill.log" > /tmp/cron
      touch ${DATA_DIR}/logs/battlenet_prefill.log
