@@ -131,6 +131,11 @@ fi
 echo "---Prepare Server---"
 chmod -R ${DATA_PERM} ${DATA_DIR}
 
+# Remove old way of creating crontab
+if [ -f ${DATA_DIR}/cron ]; then
+  rm -rf ${DATA_DIR}/cron
+fi
+
 # Create logs dir if non exists
 if [ ! -d ${DATA_DIR}/logs ]; then
   mkdir -p ${DATA_DIR}/logs
@@ -180,25 +185,61 @@ fi
 
 # Set up cron schedules and tail follow
 rm -f ${DATA_DIR}/cron 2>/dev/null
-if [ "${ENABLE_BN}" == "true" ]; then
-  echo "${CRON_SCHED_BN} ${DATA_DIR}/BattleNetPrefill/BattleNetPrefill prefill ${PREFILL_PARAMS_BN} >> ${DATA_DIR}/logs/battlenet_prefill.log" > ${DATA_DIR}/cron
-  touch ${DATA_DIR}/logs/battlenet_prefill.log
-  TAIL_FOLLOW="${DATA_DIR}/logs/battlenet_prefill.log"
-fi
-if [ "${ENABLE_STEAM}" == "true" ]; then
-  if [ "${STEAM_NO_CONFIG}" != "true" ]; then
-    echo "${CRON_SCHED_STEAM} ${DATA_DIR}/SteamPrefill/SteamPrefill prefill --no-ansi ${PREFILL_PARAMS_STEAM} >> ${DATA_DIR}/logs/steam_prefill.log" >> ${DATA_DIR}/cron
-    touch ${DATA_DIR}/logs/steam_prefill.log
-    if [ -z "${TAIL_FOLLOW}" ]; then
-      TAIL_FOLLOW="${DATA_DIR}/logs/steam_prefill.log"
-    else
-      TAIL_FOLLOW="$TAIL_FOLLOW -f ${DATA_DIR}/logs/steam_prefill.log"
+if [ ! -z "${CRON_SCHED_GLOBAL}" ]; then
+  echo "#!/bin/bash" > /tmp/global_schedule
+  if [ "${ENABLE_BN}" == "true" ]; then
+   echo "\${DATA_DIR}/BattleNetPrefill/BattleNetPrefill prefill \${PREFILL_PARAMS_BN} >> \${DATA_DIR}/logs/battlenet_prefill.log" >> /tmp/global_schedule
+   touch ${DATA_DIR}/logs/battlenet_prefill.log
+   TAIL_FOLLOW="${DATA_DIR}/logs/battlenet_prefill.log"
+  fi
+  if [ "${ENABLE_STEAM}" == "true" ]; then
+    if [ "${STEAM_NO_CONFIG}" != "true" ]; then
+      echo "\${DATA_DIR}/SteamPrefill/SteamPrefill prefill --no-ansi \${PREFILL_PARAMS_STEAM} >> \${DATA_DIR}/logs/steam_prefill.log" >> /tmp/global_schedule
+      touch ${DATA_DIR}/logs/steam_prefill.log
+      if [ -z "${TAIL_FOLLOW}" ]; then
+        TAIL_FOLLOW="${DATA_DIR}/logs/steam_prefill.log"
+      else
+        TAIL_FOLLOW="$TAIL_FOLLOW -f ${DATA_DIR}/logs/steam_prefill.log"
+      fi
+    fi
+  fi
+  chmod +x /tmp/global_schedule
+  echo "${CRON_SCHED_GLOBAL} /tmp/global_schedule" > /tmp/cron
+else
+  rm -rf /tmp/global_schedule
+  rm -rf /tmp/cron
+  if [ "${ENABLE_BN}" == "true" ]; then
+     echo "${CRON_SCHED_BN} ${DATA_DIR}/BattleNetPrefill/BattleNetPrefill prefill ${PREFILL_PARAMS_BN} >> ${DATA_DIR}/logs/battlenet_prefill.log" > /tmp/cron
+     touch ${DATA_DIR}/logs/battlenet_prefill.log
+     TAIL_FOLLOW="${DATA_DIR}/logs/battlenet_prefill.log"
+  fi
+  if [ "${ENABLE_STEAM}" == "true" ]; then
+    if [ "${STEAM_NO_CONFIG}" != "true" ]; then
+      echo "${CRON_SCHED_STEAM} ${DATA_DIR}/SteamPrefill/SteamPrefill prefill --no-ansi ${PREFILL_PARAMS_STEAM} >> ${DATA_DIR}/logs/steam_prefill.log" >> /tmp/cron
+      touch ${DATA_DIR}/logs/steam_prefill.log
+      if [ -z "${TAIL_FOLLOW}" ]; then
+        TAIL_FOLLOW="${DATA_DIR}/logs/steam_prefill.log"
+      else
+        TAIL_FOLLOW="$TAIL_FOLLOW -f ${DATA_DIR}/logs/steam_prefill.log"
+      fi
     fi
   fi
 fi
 
 # Set up crontab and list cron
-crontab ${DATA_DIR}/cron
+crontab /tmp/cron 2>/dev/null || { \
+  echo; \
+  echo "+---------------------------------------------------------------+"; \
+  echo "| CRON - ATTENTION - CRON - ATTENTION - CRON - ATTENTION - CRON |"; \
+  echo "|                                                               |"; \
+  echo "|    Setting up cron job failed, please check your schedule     |"; \
+  echo "|                   and make sure it's valid!                   |"; \
+  echo "|                                                               |"; \
+  echo "|      Visit https://crontab.guru to check your schedule!       |"; \
+  echo "|                                                               |"; \
+  echo "| CRON - ATTENTION - CRON - ATTENTION - CRON - ATTENTION - CRON |"; \
+  echo "+---------------------------------------------------------------+"; }
+
 echo
 if [ "${ENABLE_BN}" == "true" ]; then
   echo "Your cron schedule for BattleNetPrefill is: ${CRON_SCHED_BN}"
