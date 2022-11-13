@@ -33,6 +33,7 @@ If you ever want to change the apps you've selected then follow these steps agai
 | UPDATES | Set to 'true' to enable to check for updates from BattleNetPrefill/SteamPrefill on container start/restart or disable it by setting it to 'false'. | true |
 | FORCE_UPDATE | Set to 'true' to force a Prefill on every container start/restart (please be carefull with this option and enable only when you know what you are doing!) | false |
 | LOGCLEANUP | Set to 'true' to clean up the .../logs directory on each start/restart from the container. | true |
+| CRON_SCHED_GLOBAL | Specify a cron schedule to override the individual schedules for BatteNetPrefill and SteamPrefill. It will run on by one at the given cron schedule (BattleNetPrefill will be run first and SteamPrefill afterwards depending if both are enabled) | empty |
 | UID | User Identifier | 99 |
 | GID | Group Identifier | 100 |
 
