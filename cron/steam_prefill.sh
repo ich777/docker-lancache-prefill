@@ -1,5 +1,5 @@
 #!/bin/bash
-/opt/cron/env.sh
+. /opt/cron/env.sh
 if [ "${ENABLE_STEAM}" == "true" ]; then
   if [ "$(pidof SteamPrefill)" ]; then
     echo "[$(date +%F)] SteamPrefill already running, aborting schedule!" >> ${DATA_DIR}/logs/steam_prefill.log
