@@ -202,10 +202,12 @@ fi
 
 # Set up tail follow
 if [ "${ENABLE_BN}" == "true" ]; then
+ touch ${DATA_DIR}/logs/battlenet_prefill.log
  TAIL_FOLLOW="${DATA_DIR}/logs/battlenet_prefill.log"
 fi
 if [ "${ENABLE_STEAM}" == "true" ]; then
   if [ "${STEAM_NO_CONFIG}" != "true" ]; then
+    touch ${DATA_DIR}/logs/steam_prefill.log
     if [ -z "${TAIL_FOLLOW}" ]; then
       TAIL_FOLLOW="${DATA_DIR}/logs/steam_prefill.log"
     else
