@@ -194,7 +194,7 @@ else
      echo "${CRON_SCHED_BN} /opt/cron/battlenet_prefill.sh" > /tmp/cron
   fi
   if [ "${ENABLE_STEAM}" == "true" ]; then
-     echo "${STEAM_NO_CONFIG} /opt/cron/steam_prefill.sh" >> /tmp/cron
+     echo "${CRON_SCHED_STEAM} /opt/cron/steam_prefill.sh" >> /tmp/cron
   fi
 fi
 
