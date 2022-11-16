@@ -187,15 +187,15 @@ fi
 
 # Set up cron schedules
 if [ ! -z "${CRON_SCHED_GLOBAL}" ]; then
-  echo "${CRON_SCHED_GLOBAL} /opt/cron/global_schedule.sh" > /tmp/cron
+  echo "${CRON_SCHED_GLOBAL} /opt/cron/global_prefill.sh" > /tmp/cron
 else
   rm -f /tmp/cron
   if [ "${ENABLE_BN}" == "true" ]; then
-     echo "${CRON_SCHED_BN} /opt/cron/battlenet_schedule.sh" > /tmp/cron
+     echo "${CRON_SCHED_BN} /opt/cron/battlenet_prefill.sh" > /tmp/cron
   fi
   if [ "${ENABLE_STEAM}" == "true" ]; then
     if [ "${STEAM_NO_CONFIG}" != "true" ]; then
-      echo "${STEAM_NO_CONFIG} /opt/cron/steam_schedule.sh" >> /tmp/cron
+      echo "${STEAM_NO_CONFIG} /opt/cron/steam_prefill.sh" >> /tmp/cron
     fi
   fi
 fi
