@@ -168,7 +168,7 @@ if [ "${ENABLE_STEAM}" == "true" ]; then
 fi
 
 # Export necessary env variables for cron
-printenv | grep -E "DATA_DIR|ENABLE_BN|ENABLE_STEAM|PREFILL_PARAMS_STEAM|PREFILL_PARAMS_BN" | sed 's/^/export /' > /opt/cron/env.sh
+printenv | grep -E "DATA_DIR|ENABLE_BN|ENABLE_STEAM|PREFILL_PARAMS_STEAM|PREFILL_PARAMS_BN" | sed -E 's/=(.*)/="\1"/' | sed 's/^/export /' > /opt/cron/env.sh
 chmod +x /opt/cron/env.sh
 
 # Check if force update on container start/restart is enabled and execute prefill
