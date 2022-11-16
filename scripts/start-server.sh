@@ -174,53 +174,42 @@ if [ "${FORCE_UPDATE}" == "true" ]; then
   crontab -r 2>/dev/null
   echo "---Force update enabled!---"
   if [ "${ENABLE_BN}" == "true" ]; then
+    echo "[$(date +%F)] Starting BattleNetPrefill"
     ${DATA_DIR}/BattleNetPrefill/BattleNetPrefill prefill ${PREFILL_PARAMS_BN}
   fi
   if [ "${ENABLE_STEAM}" == "true" ]; then
     if [ "${STEAM_NO_CONFIG}" != "true" ]; then
+      echo "[$(date +%F)] Starting SteamPrefill"
       ${DATA_DIR}/SteamPrefill/SteamPrefill prefill --no-ansi ${PREFILL_PARAMS_STEAM}
     fi
   fi
 fi
 
-# Set up cron schedules and tail follow
-rm -f ${DATA_DIR}/cron 2>/dev/null
+# Set up cron schedules
 if [ ! -z "${CRON_SCHED_GLOBAL}" ]; then
-  echo "#!/bin/bash" > /tmp/global_schedule
+  echo "${CRON_SCHED_GLOBAL} /opt/cron/global_schedule.sh" > /tmp/cron
+else
+  rm -f /tmp/cron
   if [ "${ENABLE_BN}" == "true" ]; then
-   echo "${DATA_DIR}/BattleNetPrefill/BattleNetPrefill prefill ${PREFILL_PARAMS_BN} >> ${DATA_DIR}/logs/battlenet_prefill.log" >> /tmp/global_schedule
-   touch ${DATA_DIR}/logs/battlenet_prefill.log
-   TAIL_FOLLOW="${DATA_DIR}/logs/battlenet_prefill.log"
+     echo "${CRON_SCHED_BN} /opt/cron/battlenet_schedule.sh" > /tmp/cron
   fi
   if [ "${ENABLE_STEAM}" == "true" ]; then
     if [ "${STEAM_NO_CONFIG}" != "true" ]; then
-      echo "${DATA_DIR}/SteamPrefill/SteamPrefill prefill --no-ansi ${PREFILL_PARAMS_STEAM} >> ${DATA_DIR}/logs/steam_prefill.log" >> /tmp/global_schedule
-      touch ${DATA_DIR}/logs/steam_prefill.log
-      if [ -z "${TAIL_FOLLOW}" ]; then
-        TAIL_FOLLOW="${DATA_DIR}/logs/steam_prefill.log"
-      else
-        TAIL_FOLLOW="$TAIL_FOLLOW -f ${DATA_DIR}/logs/steam_prefill.log"
-      fi
+      echo "${STEAM_NO_CONFIG} /opt/cron/steam_schedule.sh" >> /tmp/cron
     fi
   fi
-  chmod +x /tmp/global_schedule
-  echo "${CRON_SCHED_GLOBAL} /tmp/global_schedule" > /tmp/cron
-else
-  rm -rf /tmp/cron /tmp/global_schedule /tmp/global_schedule
-  if [ "${ENABLE_BN}" == "true" ]; then
-     echo "${CRON_SCHED_BN} ${DATA_DIR}/BattleNetPrefill/BattleNetPrefill prefill ${PREFILL_PARAMS_BN} >> ${DATA_DIR}/logs/battlenet_prefill.log" > /tmp/cron
-     touch ${DATA_DIR}/logs/battlenet_prefill.log
-     TAIL_FOLLOW="${DATA_DIR}/logs/battlenet_prefill.log"
-  fi
-  if [ "${ENABLE_STEAM}" == "true" ]; then
-    if [ "${STEAM_NO_CONFIG}" != "true" ]; then
-      echo "${CRON_SCHED_STEAM} ${DATA_DIR}/SteamPrefill/SteamPrefill prefill --no-ansi ${PREFILL_PARAMS_STEAM} >> ${DATA_DIR}/logs/steam_prefill.log" >> /tmp/cron
-      touch ${DATA_DIR}/logs/steam_prefill.log
-      if [ -z "${TAIL_FOLLOW}" ]; then
-        TAIL_FOLLOW="${DATA_DIR}/logs/steam_prefill.log"
-      else
-        TAIL_FOLLOW="$TAIL_FOLLOW -f ${DATA_DIR}/logs/steam_prefill.log"
-      fi
+fi
+
+# Set up tail follow
+if [ "${ENABLE_BN}" == "true" ]; then
+ TAIL_FOLLOW="${DATA_DIR}/logs/battlenet_prefill.log"
+fi
+if [ "${ENABLE_STEAM}" == "true" ]; then
+  if [ "${STEAM_NO_CONFIG}" != "true" ]; then
+    if [ -z "${TAIL_FOLLOW}" ]; then
+      TAIL_FOLLOW="${DATA_DIR}/logs/steam_prefill.log"
+    else
+      TAIL_FOLLOW="$TAIL_FOLLOW -f ${DATA_DIR}/logs/steam_prefill.log"
     fi
   fi
 fi
