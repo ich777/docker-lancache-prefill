@@ -27,6 +27,7 @@ export PATH=/bin:/usr/bin:${DATA_DIR}:$PATH
 
 echo "---Taking ownership of data...---"
 chown -R root:${GID} /opt/scripts
+chown -R ${UID}:${GID} /opt/cron
 chmod -R 750 /opt/scripts
 chmod -R 755 /opt/cron
 chown -R ${UID}:${GID} ${DATA_DIR}
