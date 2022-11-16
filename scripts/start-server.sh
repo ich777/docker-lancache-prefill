@@ -164,8 +164,6 @@ if [ "${ENABLE_STEAM}" == "true" ]; then
     echo "|                                                                       |"
     echo "| ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION |"
     echo "+-----------------------------------------------------------------------+"
-  else
-    export ENABLE_STEAM="false"
   fi
 fi
 
