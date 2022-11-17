@@ -243,4 +243,4 @@ echo "---Container fully started, waiting for next cron job to start!---"
 echo
 
 # Follow log files
-tail -f ${TAIL_FOLLOW}
+tail -f -n 0 ${TAIL_FOLLOW}
