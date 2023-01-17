@@ -172,7 +172,7 @@ printenv | grep -E "DATA_DIR|ENABLE_BN|ENABLE_STEAM|PREFILL_PARAMS_STEAM|PREFILL
 chmod +x /opt/cron/env.sh
 
 # Check if force update on container start/restart is enabled and execute prefill
-if [ "${FORCE_UPDATE}" == "true" ]; then
+if [ "${FORCE_UPDATE}" == "true" ] || [ "${PREFILL_ONSTARTUP}" == "true" ]; then
   crontab -r 2>/dev/null
   echo "---Force update enabled!---"
   if [ "${ENABLE_BN}" == "true" ]; then
