@@ -31,7 +31,7 @@ If you ever want to change the apps you've selected then follow these steps agai
 | PREFILL_PARAMS_STEAM | You can get a full list of parameters over here: [Click](https://tpill90.github.io/steam-lancache-prefill/Detailed-Command-Usage/) (if you want to only prefill your selected apps then leave this variable empty) | --recent |
 | CRON_SCHED_STEAM | Set your cron schedule for SteamPrefill if enabled (by default it is set to 05:00 - head over to https://crontab.guru/ to create your own if you want to customize it) | 0 2 * * * |
 | UPDATES | Set to 'true' to enable to check for updates from BattleNetPrefill/SteamPrefill on container start/restart or disable it by setting it to 'false'. | true |
-| FORCE_UPDATE | Set to 'true' to force a Prefill on every container start/restart (please be carefull with this option and enable only when you know what you are doing!) | false |
+| PREFILL_ONSTARTUP | Set to 'true' to force a Prefill on every container start/restart (please be carefull with this option and enable only when you know what you are doing!) | false |
 | LOGCLEANUP | Set to 'true' to clean up the .../logs directory on each start/restart from the container. | true |
 | CRON_SCHED_GLOBAL | Specify a cron schedule to override the individual schedules for BatteNetPrefill and SteamPrefill. It will run on by one at the given cron schedule (BattleNetPrefill will be run first and SteamPrefill afterwards depending if both are enabled) | empty |
 | UID | User Identifier | 99 |
