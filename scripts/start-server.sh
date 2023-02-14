@@ -3,7 +3,7 @@
 export TERM=xterm-mono
 
 # Check if at least one prefil method is enabled
-if [ "${ENABLE_BN}" != "true" ] && [ "${ENABLE_STEAM}" != "true" ] && [ "${ENABLE_EPIC}" != "true" ]; then
+if [ "${ENABLE_BN}" != "true" ] && [ "${ENABLE_EPIC}" != "true" ] && [ "${ENABLE_STEAM}" != "true" ]; then
   echo "---No prefill selected, please enable at least one and restart the container!---"
   sleep infinity
 fi
