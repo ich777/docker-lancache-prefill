@@ -9,8 +9,8 @@ RUN apt-get update && \
 
 ENV DATA_DIR="/lancacheprefill"
 ENV ENABLE_BN="false"
-ENV ENABLE_STEAM="true"
 ENV ENABLE_EPIC="false"
+ENV ENABLE_STEAM="true"
 ENV UPDATES="true"
 ENV PREFILL_ONSTARTUP="false"
 ENV FORCE_UPDATE="false"
@@ -31,11 +31,12 @@ ENV USER="prefill"
 RUN mkdir $DATA_DIR && \
 	useradd -d $DATA_DIR -s /bin/bash $USER && \
 	chown -R $USER $DATA_DIR && \
+	echo -e '\n#Custom motd message for Docker container\n[ ! -z "$TERM" -a -r /etc/motd ] && cat /etc/docker.motd' >> /etc/bash.bashrc && \
 	ulimit -n 2048
 
 ADD /scripts/ /opt/scripts/
 ADD /cron/ /opt/cron/
-ADD /etc/ /etc/
+ADD /docker.motd /etc/docker.motd
 RUN chmod -R 777 /opt/scripts/
 RUN chmod -R 777 /opt/cron/
 
