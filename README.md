@@ -1,11 +1,11 @@
 # LANCache-Prefill in Docker optimized for Unraid
-This container will download and install BattleNetPrefill and/or SteamPrefill and run the prefill on a cron schedule.
+This container will download and install BattleNetPrefill and/or EpicPrefill and/or SteamPrefill and run the prefill on a cron schedule.
 
 **Network:** It is recommended to run this container in the same network mode as the LANCache-DNS if used, by default it is set to br0 please change that if you have your LANCache server configured to work network wide on your LAN to the correct network type for your configuration.
 
 **DNS:** I would strongly recommend that you set the DNS manually to the LANCache-DNS if you haven't it configured to be network wide on your LAN, to do that turn on the advanced view (toggle switch in the top right corner) and at the extra parameters append: --dns=yourLANcacheSERVER (of course replace 'yourLANcacheSERVER' with the address of your LANCache-DNS).
 
-**Update Notice:** The container will check by default on each start/restart on new updates for BattleNetPrefill and/or SteamPrefill, this can be disabled if really wanted.
+**Update Notice:** The container will check by default on each start/restart on new updates for BattleNetPrefill and/or EpicPrefill and/or SteamPrefill, this can be disabled if really wanted.
 
 **Steam|Epic Prefill Notice:** Steam Prefill needs to be configured to work properly, please enter the following commands and follow the prompts afterwards, you can close the window when you are finished:
 1. Open up a container console
