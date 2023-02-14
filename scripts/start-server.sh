@@ -3,7 +3,7 @@
 export TERM=xterm-mono
 
 # Check if at least one prefil method is enabled
-if [ "${ENABLE_BN}" != "true" ] && [ "${ENABLE_STEAM}" != "true" ]; then
+if [ "${ENABLE_BN}" != "true" ] && [ "${ENABLE_EPIC}" != "true" ] && [ "${ENABLE_STEAM}" != "true" ]; then
   echo "---No prefill selected, please enable at least one and restart the container!---"
   sleep infinity
 fi
@@ -68,6 +68,66 @@ if [ "${ENABLE_BN}" == "true" ]; then
   fi
 fi
 
+# Epic routine and update check
+if [ "${ENABLE_EPIC}" == "true" ]; then
+  cd ${DATA_DIR}
+  echo "---EpicPrefill enabled!---"
+  if [ ! -f ${DATA_DIR}/EpicPrefill/EpicPrefill ]; then
+    echo "---EpicPrefill not found, downloading and installing, please wait!---"
+    EPIC_LAT_V="$(wget -qO- https://api.github.com/repos/tpill90/epic-lancache-prefill/releases/latest | jq -r '.tag_name')"
+    if [ -z "${EPIC_LAT_V}" ]; then
+      echo "-----Something went wrong while getting the latest version!-----"
+      echo "---Please try again later, putting container into sleep mode!---"
+      sleep infinity
+    fi
+    if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${DATA_DIR}/EPICPrefill.zip "https://github.com/tpill90/epic-lancache-prefill/releases/download/${EPIC_LAT_V}/EpicPrefill-${EPIC_LAT_V//v}-linux-x64.zip" ; then
+        echo "---Sucessfully downloaded SteamPrefill ${EPIC_LAT_V}---"
+    else
+      echo "---Something went wrong, can't download EpicPrefill ${EPIC_LAT_V}, putting container in sleep mode---"
+      rm -f ${DATA_DIR}/EPICPrefill.zip
+      sleep infinity
+    fi
+    mkdir -p ${DATA_DIR}/EpicPrefill
+    rm -rf /tmp/epicprefill
+    unzip ${DATA_DIR}/EPICPrefill.zip -d /tmp/epicprefill
+    mv $(find /tmp/epicprefill -type f -name "EpicPrefill*") ${DATA_DIR}/EpicPrefill/EpicPrefill
+    chmod +x ${DATA_DIR}/EpicPrefill/EpicPrefill
+    rm -rf ${DATA_DIR}/EPICPrefill.zip /tmp/epicprefill
+    touch ${DATA_DIR}/epicprefill_${EPIC_LAT_V}
+  else
+    EPIC_CUR_V="$(find ${DATA_DIR}/ -maxdepth 1 -type f -name "epicprefill_*" | cut -d '_' -f2)"
+    if [ "${UPDATES}" == "true" ]; then
+      echo "---Version Check!---"
+      EPIC_LAT_V="$(wget -qO- https://api.github.com/repos/tpill90/epic-lancache-prefill/releases/latest | jq -r '.tag_name')"
+      if [ -z "${EPIC_LAT_V}" ]; then
+        echo "---Can't get latest version from EpicPrefill, falling back to installed ${EPIC_CUR_V}---"
+        EPIC_LAT_V="${EPIC_CUR_V}"
+      fi
+      if [ "${EPIC_CUR_V}" != "${EPIC_LAT_V}" ]; then
+        echo "---Version missmatch, installed ${EPIC_CUR_V}, downloading and installing latest ${EPIC_LAT_V}...---"
+        if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${DATA_DIR}/EPICPrefill.zip "https://github.com/tpill90/epic-lancache-prefill/releases/download/${EPIC_LAT_V}/EpicPrefill-${EPIC_LAT_V//v}-linux-x64.zip" ; then
+          echo "---Sucessfully downloaded EpicPrefill ${EPIC_LAT_V}---"
+        else
+          echo "---Something went wrong, can't download EpicPrefill ${EPIC_LAT_V}, putting container in sleep mode---"
+          rm -f ${DATA_DIR}/EPICPrefill.zip
+          sleep infinity
+        fi
+        mkdir -p ${DATA_DIR}/EpicPrefill
+        rm -rf /tmp/epicprefill ${DATA_DIR}/epicprefill_*
+        unzip ${DATA_DIR}/EPICPrefill.zip -d /tmp/epicprefill
+        mv $(find /tmp/epicprefill -type f -name "EpicPrefill*") ${DATA_DIR}/EpicPrefill/EpicPrefill
+        chmod +x ${DATA_DIR}/EpicPrefill/EpicPrefill
+        rm -rf ${DATA_DIR}/EPICPrefill.zip /tmp/epicprefill
+        touch ${DATA_DIR}/epicprefill_${EPIC_LAT_V}
+      elif [ "${EPIC_CUR_V}" == "${EPIC_LAT_V}" ]; then
+        echo "---EpicPrefill ${EPIC_CUR_V} up-to-date---"
+      fi
+    else
+      echo "---Update check disabled, found installed version ${EPIC_CUR_V}---"
+    fi
+  fi
+fi
+
 # Steam routine and update check
 if [ "${ENABLE_STEAM}" == "true" ]; then
   cd ${DATA_DIR}
@@ -100,7 +160,7 @@ if [ "${ENABLE_STEAM}" == "true" ]; then
       echo "---Version Check!---"
       STEAM_LAT_V="$(wget -qO- https://api.github.com/repos/tpill90/steam-lancache-prefill/releases/latest | jq -r '.tag_name')"
       if [ -z "${STEAM_LAT_V}" ]; then
-        echo "---Can't get latest version from SteamPrefill, falling back to installed ${BN_CUR_V}---"
+        echo "---Can't get latest version from SteamPrefill, falling back to installed ${STEAM_CUR_V}---"
         STEAM_LAT_V="${STEAM_CUR_V}"
       fi
       if [ "${STEAM_CUR_V}" != "${STEAM_LAT_V}" ]; then
@@ -146,6 +206,28 @@ if [ "${LOGCLEANUP}" == "true" ]; then
    rm -f ${DATA_DIR}/logs/*
 fi
 
+# Check if Epic is enabled and already configured or not
+if [ "${ENABLE_EPIC}" == "true" ]; then
+  if [ ! -f ${DATA_DIR}/EpicPrefill/Config/userAccount.json ]; then
+    export ENABLE_EPIC="false"
+    echo "+-----------------------------------------------------------------------+"
+    echo "| ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION |"
+    echo "|                                                                       |"
+    echo "| Epic Prefill not configured, to configure it please do the following: |"
+    echo "| 1. Open up a container console                                        |"
+    echo "| 2. Type in 'su \$USER' (case sensitive!) and press ENTER               |"
+    echo "| 3. Type in 'cd \${DATA_DIR}/EpicPrefill' and press ENTER               |"
+    echo "| 4. Type in './EpicPrefill select-apps' and press ENTER                |"
+    echo "| 5. Open the shown link in a separate browser and login                |"
+    echo "| 6. Copy the authorization code into the Terminal and press ENTER      |"
+    echo "| 7. Select the apps you want to prefill (you don't have to select any) |"
+    echo "| 8. Done                                                               |"
+    echo "|                                                                       |"
+    echo "| ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION |"
+    echo "+-----------------------------------------------------------------------+"
+  fi
+fi
+
 # Check if Steam is enabled and already configured or not
 if [ "${ENABLE_STEAM}" == "true" ]; then
   if [ ! -f ${DATA_DIR}/SteamPrefill/Config/account.config ]; then
@@ -168,7 +250,7 @@ if [ "${ENABLE_STEAM}" == "true" ]; then
 fi
 
 # Export necessary env variables for cron
-printenv | grep -E "DATA_DIR|ENABLE_BN|ENABLE_STEAM|PREFILL_PARAMS_STEAM|PREFILL_PARAMS_BN" | sed -E 's/=(.*)/="\1"/' | sed 's/^/export /' > /opt/cron/env.sh
+printenv | grep -E "DATA_DIR|ENABLE_BN|ENABLE_STEAM|ENABLE_EPIC|PREFILL_PARAMS_STEAM|PREFILL_PARAMS_EPIC|PREFILL_PARAMS_BN" | sed -E 's/=(.*)/="\1"/' | sed 's/^/export /' > /opt/cron/env.sh
 chmod +x /opt/cron/env.sh
 
 # Check if force update on container start/restart is enabled and execute prefill
@@ -178,6 +260,10 @@ if [ "${FORCE_UPDATE}" == "true" ] || [ "${PREFILL_ONSTARTUP}" == "true" ]; then
   if [ "${ENABLE_BN}" == "true" ]; then
     echo "[$(date +%F)] Starting BattleNetPrefill"
     ${DATA_DIR}/BattleNetPrefill/BattleNetPrefill prefill ${PREFILL_PARAMS_BN}
+  fi
+  if [ "${ENABLE_EPIC}" == "true" ]; then
+      echo "[$(date +%F)] Starting EpicPrefill"
+      ${DATA_DIR}/EpicPrefill/EpicPrefill prefill --no-ansi ${PREFILL_PARAMS_EPIC}
   fi
   if [ "${ENABLE_STEAM}" == "true" ]; then
       echo "[$(date +%F)] Starting SteamPrefill"
@@ -193,6 +279,9 @@ else
   if [ "${ENABLE_BN}" == "true" ]; then
      echo "${CRON_SCHED_BN} /opt/cron/battlenet_prefill.sh" > /tmp/cron
   fi
+  if [ "${ENABLE_EPIC}" == "true" ]; then
+     echo "${CRON_SCHED_EPIC} /opt/cron/epic_prefill.sh" >> /tmp/cron
+  fi
   if [ "${ENABLE_STEAM}" == "true" ]; then
      echo "${CRON_SCHED_STEAM} /opt/cron/steam_prefill.sh" >> /tmp/cron
   fi
@@ -202,6 +291,14 @@ fi
 if [ "${ENABLE_BN}" == "true" ]; then
  touch ${DATA_DIR}/logs/battlenet_prefill.log
  TAIL_FOLLOW="${DATA_DIR}/logs/battlenet_prefill.log"
+fi
+if [ "${ENABLE_EPIC}" == "true" ]; then
+  touch ${DATA_DIR}/logs/epic_prefill.log
+  if [ -z "${TAIL_FOLLOW}" ]; then
+    TAIL_FOLLOW="${DATA_DIR}/logs/epic_prefill.log"
+  else
+    TAIL_FOLLOW="$TAIL_FOLLOW -f ${DATA_DIR}/logs/epic_prefill.log"
+  fi
 fi
 if [ "${ENABLE_STEAM}" == "true" ]; then
   touch ${DATA_DIR}/logs/steam_prefill.log
@@ -232,6 +329,9 @@ if [ ! -z "${CRON_SCHED_GLOBAL}" ]; then
 else
   if [ "${ENABLE_BN}" == "true" ]; then
     echo "Your cron schedule for BattleNetPrefill is: ${CRON_SCHED_BN}"
+  fi
+  if [ "${ENABLE_EPIC}" == "true" ]; then
+    echo "Your cron schedule for EpicPrefill is: ${CRON_SCHED_EPIC}"
   fi
   if [ "${ENABLE_STEAM}" == "true" ]; then
     echo "Your cron schedule for SteamPrefill is: ${CRON_SCHED_STEAM}"
