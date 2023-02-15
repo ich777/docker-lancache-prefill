@@ -33,7 +33,7 @@ RUN mkdir $DATA_DIR && \
 	chown -R $USER $DATA_DIR && \
 	ulimit -n 2048
 
-RUN	echo "#Custom motd message for Docker container" >> /etc/bash.bashrc && \
+RUN echo "#Custom motd message for Docker container" >> /etc/bash.bashrc && \
 	echo "[ ! -z \"\$TERM\" -a -r /etc/motd ] && cat /etc/docker.motd" >> /etc/bash.bashrc
 
 ADD /scripts/ /opt/scripts/
