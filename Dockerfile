@@ -31,7 +31,9 @@ ENV USER="prefill"
 RUN mkdir $DATA_DIR && \
 	useradd -d $DATA_DIR -s /bin/bash $USER && \
 	chown -R $USER $DATA_DIR && \
-	echo -e '#Custom motd message for Docker container\n[ ! -z "$TERM" -a -r /etc/motd ] && cat /etc/docker.motd' >> /etc/bash.bashrc && \
+	echo "\
+#Custom motd message for Docker container\
+[ ! -z \"\$TERM\" -a -r /etc/motd ] && cat /etc/docker.motd" >> /etc/bash.bashrc && \
 	ulimit -n 2048
 
 ADD /scripts/ /opt/scripts/
