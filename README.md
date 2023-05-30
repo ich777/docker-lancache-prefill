@@ -7,17 +7,17 @@ This container will download and install BattleNetPrefill and/or EpicPrefill and
 
 **Update Notice:** The container will check by default on each start/restart on new updates for BattleNetPrefill and/or EpicPrefill and/or SteamPrefill, this can be disabled if really wanted.
 
-**Steam|Epic Prefill Notice:** Steam Prefill needs to be configured to work properly, please enter the following commands and follow the prompts afterwards, you can close the window when you are finished:
+**BattleNet|Epic|Steam| Prefill Notice:** Steam Prefill needs to be configured to work properly, please enter the following commands and follow the prompts afterwards, you can close the window when you are finished:
 1. Open up a container console
 2. Type in 'su $USER' (case sensitive!) and press ENTER
-3. Type in 'cd ${DATA_DIR}/(Steam|Epic)Prefill' and press ENTER
-4. Type in './(Steam|Epic)Prefill select-apps' and press ENTER
-5. Enter your Steam/Epic credentials and follow the steps displayed
-6. Select the apps you want to prefill (you don't have to select any)
+3. Type in 'cd ${DATA_DIR}/(BattleNet|Epic|Steam)Prefill' and press ENTER
+4. Type in './(BattleNet|Epic|Steam)Prefill select-apps' and press ENTER
+5. Enter your Epic/Steam credentials and/or follow the steps displayed
+6. Select the apps you want to prefill
 7. Done
 
-_Notice:_ In the above example you have to choose between Steam or Epic so that it says SteamPrefill or EpicPrefill instead of (Steam|Epic)Prefill. 
-(these stepps are also displayed in the container log when Steam isn't configured yet)
+_Notice:_ In the above example you have to choose between BattleNet, Epic or Steam so that it says BattleNetPrefill, EpicPrefill or SteamPrefill instead of (BattleNet|Epic|Steam)Prefill. 
+(these stepps are also displayed in the container log when BattleNet, Epic, Steam isn't/aren't configured yet)
 
 If you ever want to change the apps you've selected then follow these steps again.
 
@@ -26,7 +26,6 @@ If you ever want to change the apps you've selected then follow these steps agai
 | --- | --- | --- |
 | DATA_DIR | Main data path | /lancacheprefill |
 | ENABLE_BN | Set to 'true' or 'false' to enable or disable BattleNetPrefill | true |
-| PREFILL_PARAMS_BN | You can get a full list of parameters over here: [Click](https://github.com/tpill90/battlenet-lancache-prefill#detailed-command-usage) | --products s1 |
 | CRON_SCHED_BN | Set your cron schedule for the BattleNetPrefill if enabled (by default it is set to 05:00 - head over to [crontab guru](https://crontab.guru/) to create your own if you want to customize it) | 0 5 * * * |
 | ENABLE_EPIC | Set to 'true' or 'false' to enable or disable EpicPrefill | true |
 | PREFILL_PARAMS_EPIC | You can get a full list of parameters over here: [Click](https://github.com/tpill90/epic-lancache-prefill#getting-started) | empty |
@@ -45,7 +44,6 @@ If you ever want to change the apps you've selected then follow these steps agai
 ```
 docker run --name LANCache-Prefill -d \
 	--env 'ENABLE_BN=true' \
-	--env 'PREFILL_PARAMS_BN=--products s1' \
 	--env 'CRON_SCHED_BN=0 5 * * *' \
 	--env 'ENABLE_EPIC=true' \
 	--env 'CRON_SCHED_EPIC=0 4 * * *' \
