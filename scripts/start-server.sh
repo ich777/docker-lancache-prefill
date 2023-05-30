@@ -270,7 +270,7 @@ if [ "${ENABLE_STEAM}" == "true" ]; then
 fi
 
 # Export necessary env variables for cron
-printenv | grep -E "DATA_DIR|ENABLE_BN|ENABLE_STEAM|ENABLE_EPIC|PREFILL_PARAMS_STEAM|PREFILL_PARAMS_EPIC|PREFILL_PARAMS_BN" | sed -E 's/=(.*)/="\1"/' | sed 's/^/export /' > /opt/cron/env.sh
+printenv | grep -E "DATA_DIR|ENABLE_BN|ENABLE_STEAM|ENABLE_EPIC|PREFILL_PARAMS_STEAM|PREFILL_PARAMS_EPIC" | sed -E 's/=(.*)/="\1"/' | sed 's/^/export /' > /opt/cron/env.sh
 chmod +x /opt/cron/env.sh
 
 # Check if force update on container start/restart is enabled and execute prefill
@@ -279,7 +279,7 @@ if [ "${FORCE_UPDATE}" == "true" ] || [ "${PREFILL_ONSTARTUP}" == "true" ]; then
   echo "---Force update enabled!---"
   if [ "${ENABLE_BN}" == "true" ]; then
     echo "[$(date +%F)] Starting BattleNetPrefill"
-    ${DATA_DIR}/BattleNetPrefill/BattleNetPrefill prefill -no-ansi ${PREFILL_PARAMS_BN}
+    ${DATA_DIR}/BattleNetPrefill/BattleNetPrefill prefill -no-ansi
   fi
   if [ "${ENABLE_EPIC}" == "true" ]; then
       echo "[$(date +%F)] Starting EpicPrefill"
