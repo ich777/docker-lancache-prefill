@@ -1,16 +1,17 @@
-+-----------------------------------------------------------------------+
-| ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION |
-|                                                                       |
-| To configure Steam and Epic Prefill, please do the following:         |
-| 1. Type in 'su $USER' (case sensitive!) and press ENTER               |
-| 2. Type in 'cd ${DATA_DIR}/(Steam|Epic)Prefill' and press ENTER       |
-| 3. Type in './(Steam|Epic)Prefill select-apps' and press ENTER        |
-| 4. Enter your Steam/Epic credentials and follow the steps displayed   |
-| 5. Select the apps you want to prefill (you don't have to select any) |
-| 6. Done                                                               |
-|                                                                       |
-| In the above example you have to choose between Steam or Epic so that |
-| it says SteamPrefill or EpicPrefill instead of (Steam|Epic)Prefill.   | 
-|                                                                       |
-| ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION |
-+-----------------------------------------------------------------------+
++-------------------------------------------------------------------------------+
+|     ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION     |
+|                                                                               |
+| To configure BattleNet, Epic and Steam Prefill, please do the following:      |
+| 1. Type in 'su $USER' (case sensitive!) and press ENTER                       |
+| 2. Type in 'cd ${DATA_DIR}/(BattleNet|Epic|Steam)Prefill' and press ENTER     |
+| 3. Type in './(BattleNet|Epic|Steam)Prefill select-apps' and press ENTER      |
+| 4. Enter your BattleNet/Epic/Steam credentials and follow the steps displayed |
+| 5. Select the apps you want to prefill and press ENTER                        |
+| 6. Done                                                                       |
+|                                                                               |
+| In the above example you have to choose between BattleNet, Steam or Epic so   |
+| that it says BattleNetPrefill, EpicPrefill or SteamPrefill instead            |
+| of (BattleNet|Epic|Steam)Prefill.                                             | 
+|                                                                               |
+|    ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION      |
++-------------------------------------------------------------------------------+
