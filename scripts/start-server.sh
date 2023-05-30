@@ -206,6 +206,26 @@ if [ "${LOGCLEANUP}" == "true" ]; then
    rm -f ${DATA_DIR}/logs/*
 fi
 
+# Check if Battle Net is enabled and already configured or not
+if [ "${ENABLE_BN}" == "true" ]; then
+  if [ ! -f ${DATA_DIR}/BattleNetPrefill/Config/selectedAppsToPrefill.json ]; then
+    export ENABLE_BN="false"
+    echo "+-----------------------------------------------------------------------+"
+    echo "| ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION |"
+    echo "|                                                                       |"
+    echo "| Epic Prefill not configured, to configure it please do the following: |"
+    echo "| 1. Open up a container console                                        |"
+    echo "| 2. Type in 'su \$USER' (case sensitive!) and press ENTER               |"
+    echo "| 3. Type in 'cd \${DATA_DIR}/BattleNetPrefill' and press ENTER          |"
+    echo "| 4. Type in './BattleNetPrefill select-apps' and press ENTER           |"
+    echo "| 5. Select the apps you want to prefill and press ENTER                |"
+    echo "| 6. Done                                                               |"
+    echo "|                                                                       |"
+    echo "| ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION |"
+    echo "+-----------------------------------------------------------------------+"
+  fi
+fi
+
 # Check if Epic is enabled and already configured or not
 if [ "${ENABLE_EPIC}" == "true" ]; then
   if [ ! -f ${DATA_DIR}/EpicPrefill/Config/userAccount.json ]; then
@@ -259,7 +279,7 @@ if [ "${FORCE_UPDATE}" == "true" ] || [ "${PREFILL_ONSTARTUP}" == "true" ]; then
   echo "---Force update enabled!---"
   if [ "${ENABLE_BN}" == "true" ]; then
     echo "[$(date +%F)] Starting BattleNetPrefill"
-    ${DATA_DIR}/BattleNetPrefill/BattleNetPrefill prefill ${PREFILL_PARAMS_BN}
+    ${DATA_DIR}/BattleNetPrefill/BattleNetPrefill prefill -no-ansi ${PREFILL_PARAMS_BN}
   fi
   if [ "${ENABLE_EPIC}" == "true" ]; then
       echo "[$(date +%F)] Starting EpicPrefill"
