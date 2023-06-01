@@ -30,7 +30,7 @@ if [ "${ENABLE_BN}" == "true" ]; then
     mkdir -p ${DATA_DIR}/BattleNetPrefill
     rm -rf /tmp/bnprefill
     unzip ${DATA_DIR}/BNPrefill.zip -d /tmp/bnprefill
-    mv $(find /tmp/bnprefill -type f) ${DATA_DIR}/BattleNetPrefill/BattleNetPrefill
+    mv $(find /tmp/bnprefill -type f -name "BattleNetPrefill*") ${DATA_DIR}/BattleNetPrefill/BattleNetPrefill
     chmod +x ${DATA_DIR}/BattleNetPrefill/BattleNetPrefill
     rm -rf ${DATA_DIR}/BNPrefill.zip /tmp/bnprefill
     touch ${DATA_DIR}/bnprefill_${BN_LAT_V}
