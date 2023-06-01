@@ -279,7 +279,7 @@ if [ "${FORCE_UPDATE}" == "true" ] || [ "${PREFILL_ONSTARTUP}" == "true" ]; then
   echo "---Force update enabled!---"
   if [ "${ENABLE_BN}" == "true" ]; then
     echo "[$(date +%F)] Starting BattleNetPrefill"
-    ${DATA_DIR}/BattleNetPrefill/BattleNetPrefill prefill -no-ansi
+    ${DATA_DIR}/BattleNetPrefill/BattleNetPrefill prefill --no-ansi
   fi
   if [ "${ENABLE_EPIC}" == "true" ]; then
       echo "[$(date +%F)] Starting EpicPrefill"
