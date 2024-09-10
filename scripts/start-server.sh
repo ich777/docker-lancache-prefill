@@ -210,19 +210,19 @@ fi
 if [ "${ENABLE_BN}" == "true" ]; then
   if [ ! -f ${DATA_DIR}/BattleNetPrefill/Config/selectedAppsToPrefill.json ]; then
     export ENABLE_BN="false"
-    echo "+-----------------------------------------------------------------------+"
-    echo "| ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION |"
-    echo "|                                                                       |"
-    echo "| Epic Prefill not configured, to configure it please do the following: |"
-    echo "| 1. Open up a container console                                        |"
-    echo "| 2. Type in 'su \$USER' (case sensitive!) and press ENTER               |"
-    echo "| 3. Type in 'cd \${DATA_DIR}/BattleNetPrefill' and press ENTER          |"
-    echo "| 4. Type in './BattleNetPrefill select-apps' and press ENTER           |"
-    echo "| 5. Select the apps you want to prefill and press ENTER                |"
-    echo "| 6. Done                                                               |"
-    echo "|                                                                       |"
-    echo "| ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION |"
-    echo "+-----------------------------------------------------------------------+"
+    echo "+---------------------------------------------------------------------------+"
+    echo "| ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION     |"
+    echo "|                                                                           |"
+    echo "| BattleNetPrefill not configured, to configure it please do the following: |"
+    echo "| 1. Open up a container console                                            |"
+    echo "| 2. Type in 'su \$USER' (case sensitive!) and press ENTER                   |"
+    echo "| 3. Type in 'cd \${DATA_DIR}/BattleNetPrefill' and press ENTER              |"
+    echo "| 4. Type in './BattleNetPrefill select-apps' and press ENTER               |"
+    echo "| 5. Select the apps you want to prefill and press ENTER                    |"
+    echo "| 6. Done                                                                   |"
+    echo "|                                                                           |"
+    echo "| ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION - ATTENTION     |"
+    echo "+---------------------------------------------------------------------------+"
   fi
 fi
 
@@ -273,7 +273,7 @@ fi
 printenv | grep -E "DATA_DIR|ENABLE_BN|ENABLE_STEAM|ENABLE_EPIC|PREFILL_PARAMS_STEAM|PREFILL_PARAMS_EPIC" | sed -E 's/=(.*)/="\1"/' | sed 's/^/export /' > /opt/cron/env.sh
 chmod +x /opt/cron/env.sh
 
-# Check if force update on container start/restart is enabled and execute prefill
+# PREFILL_ONSTARTUP - On start/restart execute each prefill one by one
 if [ "${FORCE_UPDATE}" == "true" ] || [ "${PREFILL_ONSTARTUP}" == "true" ]; then
   crontab -r 2>/dev/null
   echo "---Force update enabled!---"
