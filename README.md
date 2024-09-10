@@ -53,40 +53,38 @@ By default, updates will automatically be checked on container start/restart for
 | GID               | Group Identifier                                      | 100 |
 | UPDATES           | When enabled, will check for any LancachePrefill updates on container startup. | true |
 | LOGCLEANUP        | Set to **true** to clean up the .../logs directory on each start or restart of the container. | true |
-| CRON_SCHED_GLOBAL | Specifies a cron schedule that will override any individual schedules for BattlenetPrefill, EpicPrefill, and SteamPrefill.  Each prefill will be run sequentially on the given schedule. |  |
+| CRON_SCHED_GLOBAL | Specifies a cron schedule that will override any individual schedules for BattlenetPrefill, EpicPrefill, and SteamPrefill.  Each prefill will be run sequentially on the given schedule. | 0 2 * * * |
 | PREFILL_ONSTARTUP | When enabled, will run a prefill every time the container starts (or restarts), rather than waiting for the cron job to trigger.  Note that this is not generally not needed, and should only be enabled in some very specific scenarios.  | false |
 
 ### BattleNetPrefill
 | Name     | Description | Default |
 | -------- | ----------- | ------- |
 | ENABLE_BN | Set to **true** or **false** to enable or disable BattleNetPrefill. | false |
-| CRON_SCHED_BN | Sets the cron schedule for BattleNetPrefill, if it is enabled. By default it is set to 5am, head over to [crontab guru](https://crontab.guru/) to create your own if you want to customize it. | 0 5 * * * |
+| CRON_SCHED_BN | Sets the cron schedule for BattleNetPrefill, if it is enabled. By default it is set to 5am, head over to [crontab guru](https://crontab.guru/) to create your own if you want to customize it. |  |
 
 ### EpicPrefill
 | Name     | Description | Default |
 | -------- | ----------- | ------- |
 | ENABLE_EPIC | Set to **true** or **false** to enable or disable EpicPrefill | false |
 | PREFILL_PARAMS_EPIC | Specifies additional options for EpicPrefill.  You can get a full list of options from the [project wiki](https://tpill90.github.io/epic-lancache-prefill/Detailed-Command-Usage/#prefill) |  |
-| CRON_SCHED_EPIC | Sets the cron schedule for EpicPrefill, if it is enabled. By default it is set to 4am, head over to [crontab guru](https://crontab.guru/) to create your own if you want to customize it. | 0 4 * * * |
+| CRON_SCHED_EPIC | Sets the cron schedule for EpicPrefill, if it is enabled. By default it is set to 4am, head over to [crontab guru](https://crontab.guru/) to create your own if you want to customize it. |  |
 
 ### SteamPrefill
 | Name     | Description | Default |
 | -------- | ----------- | ------- |
 | ENABLE_STEAM | Set to **true** or **false** to enable or disable SteamPrefill | true |
 | PREFILL_PARAMS_STEAM | Specifies additional options for SteamPrefill.  You can get a full list of options from the [project wiki](https://tpill90.github.io/steam-lancache-prefill/detailed-command-usage/Prefill/#options).  The default value of `--recent` will prefill your most recently played games in addition to selected apps.  If you want to only prefill your selected apps then leave this variable empty. | --recent |
-| CRON_SCHED_STEAM | Sets the cron schedule for SteamPrefill, if it is enabled. By default it is set to 2am, head over to [crontab guru](https://crontab.guru/) to create your own if you want to customize it. | 0 2 * * * |
+| CRON_SCHED_STEAM | Sets the cron schedule for SteamPrefill, if it is enabled. By default it is set to 2am, head over to [crontab guru](https://crontab.guru/) to create your own if you want to customize it. |  |
 
 
 # Run example
 ```
 docker run --name LANCache-Prefill -d \
 	--env 'ENABLE_BN=true' \
-	--env 'CRON_SCHED_BN=0 5 * * *' \
 	--env 'ENABLE_EPIC=true' \
-	--env 'CRON_SCHED_EPIC=0 4 * * *' \
 	--env 'ENABLE_STEAM=true' \
 	--env 'PREFILL_PARAMS_STEAM=--recent' \
-	--env 'CRON_SCHED_STEAM=0 2 * * *' \
+	--env 'CRON_SCHED_GLOBAL=0 2 * * *' \
 	--env 'UPDATES=true' \
 	--env 'FORCE_UPDATE=false' \
 	--env 'LOGCLEANUP=true' \
